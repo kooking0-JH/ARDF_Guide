@@ -89,6 +89,8 @@ a { color: var(--band35); }
 .hero h1 { font-size: var(--step-4); font-weight: 700; letter-spacing: -0.01em; }
 .hero h1 small { display: block; font-size: 0.42em; font-weight: 500; color: var(--ink-2); letter-spacing: 0; margin-top: 10px; line-height: 1.5; }
 .hero-lead { margin-top: 18px; font-size: var(--step-1); color: var(--ink-2); max-width: 34ch; }
+.pic { position: relative; }
+.pic .credit { position: absolute; right: 6px; bottom: 6px; padding: 2px 7px; border-radius: 3px; background: rgba(0,0,0,.55); color: #fff; font-size: 0.68rem; line-height: 1.4; letter-spacing: 0.01em; pointer-events: none; }
 .hero figure { margin: 0; }
 .hero img { width: 100%; height: auto; display: block; border-radius: 4px; aspect-ratio: 811 / 1059; object-fit: cover; object-position: 50% 45%; }
 figcaption { font-size: 0.82rem; color: var(--ink-3); margin-top: 8px; line-height: 1.5; }
@@ -790,8 +792,8 @@ table.cmp td .mono { font-size: 0.92em; }
     <p class="hero-lead">지도와 나침반, 방향 탐지 수신기를 들고 숲속에 숨은 송신기를 찾아 달리는 경기입니다. 규정부터 전파의 성질, 수신기 다루는 법, 실전 탐색 순서까지 한 편에 정리했습니다.</p>
   </div>
   <figure>
-    <img src="images/ota-2023-cover.jpg" alt="ARRL On the Air 2023년 3·4월호 표지. 헤드폰을 쓰고 루프 안테나 수신기와 지도를 든 채 숲을 달리는 선수" width="811" height="1059">
-    <figcaption><i>ARRL On the Air</i> 2023년 3·4월호 표지. 3.5 MHz 루프 수신기와 지도를 들고 숲을 달리는 선수 (Radio orienteering)</figcaption>
+    <div class="pic"><img src="images/ota-2023-cover.jpg" alt="ARRL On the Air 2023년 3·4월호 표지. 헤드폰을 쓰고 루프 안테나 수신기와 지도를 든 채 숲을 달리는 선수" width="811" height="1059"><span class="credit">사진: ARRL OTA 2023.3·4</span></div>
+    <figcaption>3.5 MHz 루프 수신기와 지도를 들고 숲을 달리는 선수 (Radio orienteering)</figcaption>
   </figure>
 </header>
 
@@ -860,8 +862,8 @@ table.cmp td .mono { font-size: 0.92em; }
     <div class="bands">
       <article class="band b35">
         <div class="band-head"><strong>3.5 MHz</strong><span>80 m · HF</span></div>
-        <img src="images/ota-2023-80m-runner.jpg" alt="숲속에서 루프 안테나가 달린 3.5 MHz 수신기를 들고 헤드폰을 쓴 채 지도를 보며 걷는 선수" width="1143" height="825">
-        <p class="cap">3.5 MHz 루프 수신기로 숲을 탐색하는 선수 (80 m receiver). 사진: <i>ARRL On the Air</i> 2023년 3·4월호, Charles E. Scharlau(NZ0I) 기사</p>
+        <div class="pic"><img src="images/ota-2023-80m-runner.jpg" alt="숲속에서 루프 안테나가 달린 3.5 MHz 수신기를 들고 헤드폰을 쓴 채 지도를 보며 걷는 선수" width="1143" height="825"><span class="credit">사진: ARRL OTA 2023.3·4</span></div>
+        <p class="cap">3.5 MHz 루프 수신기로 숲을 탐색하는 선수 (80 m receiver)</p>
         <dl>
           <dt>주파수</dt><dd class="mono">3.510 – 3.600 MHz</dd>
           <dt>송신 출력</dt><dd>1 – 5 W</dd>
@@ -873,7 +875,7 @@ table.cmp td .mono { font-size: 0.92em; }
       <article class="band b144">
         <div class="band-head"><strong>144 MHz</strong><span>2 m · VHF</span></div>
         <img src="images/kr-2m-yagi-runners.jpg" alt="제14회 전파방향탐지대회(ARDF) 숲길에서 야기 안테나 수신기를 머리 위로 들고 방향을 재는 선수들" width="600" height="398">
-        <p class="cap">제14회 전파방향탐지대회(ARDF)에서 야기 안테나 수신기로 방향을 재는 선수들 (2 m receiver). 사진: 대회 위원회 제공</p>
+        <p class="cap">제14회 전파방향탐지대회(ARDF)에서 야기 안테나 수신기로 방향을 재는 선수들 (2 m receiver)</p>
         <dl>
           <dt>주파수</dt><dd class="mono">144.500 – 144.900 MHz</dd>
           <dt>송신 출력</dt><dd>ERP 0.25 – 1 W</dd>
@@ -2531,7 +2533,7 @@ table.cmp td .mono { font-size: 0.92em; }
     <li>OK2BWN, SUPERFOX 3,5GX · 3,5MX · 145MX 설명서와 제품 사양표</li>
     <li>Marcela Šrůtová (OK1KYP), 무선 방향탐지 수신기 기사, <i>Praktická elektronika A Radio</i>, 2016년 9월호 (사진: Miloslav Nečas)</li>
     <li>「ARDF 지도제작교육」 교재 (지도 기호와 색)</li>
-    <li>사진: 6K5EHN. 첫 사진(표지)과 1-2절 3.5 MHz 사진은 <i>ARRL On the Air</i> 2023년 3·4월호, 1-2절 144 MHz 사진은 제14회 전파방향탐지대회 위원회 제공</li>
+    <li>사진: 6K5EHN. 첫 사진(표지)과 1-2절 3.5 MHz 사진은 <i>ARRL On the Air</i> 2023년 3·4월호 (Charles E. Scharlau, NZ0I 기사)</li>
   </ul>
 </footer>
 </main>
