@@ -240,6 +240,10 @@ figcaption { font-size: 0.82rem; color: var(--ink-3); margin-top: 8px; line-heig
 .dial .hand-pin { fill: var(--ink); }
 .dial .dial-cap { font: 400 11px var(--font-body); fill: var(--ink-3); }
 .readout { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: center; width: 100%; }
+.dial-ctl { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; justify-content: center; margin: 12px 0 14px; }
+.dial-hint { font-size: 0.88rem; color: var(--ink-2); }
+.laps { font-family: var(--font-mono); font-size: 0.85rem; color: var(--ink-2); padding: 2px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); }
+.laps b { color: var(--flag); font-size: 1rem; margin-right: 2px; }
 .readout output { font-family: var(--font-mono); font-size: 0.85rem; color: var(--ink-2); min-width: 15ch; text-align: center; font-variant-numeric: tabular-nums; }
 
 /* 종목 블록 */
@@ -1036,20 +1040,24 @@ table.cmp td .mono { font-size: 0.92em; }
       <h4>클래식<span>5분 주기, 1분씩</span></h4>
       <svg class="dial" id="dial-classic" viewBox="-28 0 316 272" role="img" aria-label="클래식 5분 송신 주기"><circle cx="130" cy="130" r="118" class="beacon-ring"/><path d="M132.3,22.0 A108,108 0 0 1 232.0,94.5 L179.1,112.9 A52,52 0 0 0 131.1,78.0 Z" class="sec sec1" data-i="0"/><text x="177.0" y="62.3" class="sec-num" text-anchor="middle">1</text><text x="177.0" y="77.3" class="sec-code" text-anchor="middle">MOE</text><text x="130.0" y="7.0" class="dial-tick" text-anchor="middle">0:00</text><path d="M233.4,98.8 A108,108 0 0 1 195.3,216.0 L161.4,171.4 A52,52 0 0 0 179.8,115.0 Z" class="sec sec2" data-i="1"/><text x="206.1" y="151.7" class="sec-num" text-anchor="middle">2</text><text x="206.1" y="166.7" class="sec-code" text-anchor="middle">MOI</text><text x="250.8" y="94.8" class="dial-tick" text-anchor="start">1:00</text><path d="M191.6,218.7 A108,108 0 0 1 68.4,218.7 L100.3,172.7 A52,52 0 0 0 159.7,172.7 Z" class="sec sec3" data-i="2"/><text x="130.0" y="207.0" class="sec-num" text-anchor="middle">3</text><text x="130.0" y="222.0" class="sec-code" text-anchor="middle">MOS</text><text x="204.6" y="236.7" class="dial-tick" text-anchor="start">2:00</text><path d="M64.7,216.0 A108,108 0 0 1 26.6,98.8 L80.2,115.0 A52,52 0 0 0 98.6,171.4 Z" class="sec sec4" data-i="3"/><text x="53.9" y="151.7" class="sec-num" text-anchor="middle">4</text><text x="53.9" y="166.7" class="sec-code" text-anchor="middle">MOH</text><text x="55.4" y="236.7" class="dial-tick" text-anchor="end">3:00</text><path d="M28.0,94.5 A108,108 0 0 1 127.7,22.0 L128.9,78.0 A52,52 0 0 0 80.9,112.9 Z" class="sec sec5" data-i="4"/><text x="83.0" y="62.3" class="sec-num" text-anchor="middle">5</text><text x="83.0" y="77.3" class="sec-code" text-anchor="middle">MO5</text><text x="9.2" y="94.8" class="dial-tick" text-anchor="end">4:00</text><circle cx="130" cy="130" r="46" class="dial-hub"/><text x="130" y="128" class="hub1" text-anchor="middle">5분</text><text x="130" y="145" class="hub2" text-anchor="middle">주기</text><line x1="130" y1="82" x2="130" y2="8" class="hand" id="hand-classic"/><text x="130" y="266" class="dial-cap" text-anchor="middle">바깥 링: 결승 비컨 MO (상시 발신)</text></svg>
       <div class="readout">
-        <button type="button" class="btn" data-dial="classic"><span class="tri"></span>주기 돌려보기</button>
         <output id="out-classic" aria-live="polite">대기 중</output>
+        <span class="laps"><b id="laps-classic">0</b>바퀴</span>
       </div>
     </div>
     <div class="dialbox">
       <h4>스프린트<span>1분 주기, 12초씩</span></h4>
       <svg class="dial" id="dial-sprint" viewBox="-28 0 316 272" role="img" aria-label="스프린트 1분 송신 주기"><circle cx="130" cy="130" r="118" class="beacon-ring"/><path d="M132.3,22.0 A108,108 0 0 1 232.0,94.5 L179.1,112.9 A52,52 0 0 0 131.1,78.0 Z" class="sec sec1" data-i="0"/><text x="177.0" y="62.3" class="sec-num" text-anchor="middle">1·1F</text><text x="177.0" y="77.3" class="sec-code" text-anchor="middle">MOE</text><text x="130.0" y="7.0" class="dial-tick" text-anchor="middle">0초</text><path d="M233.4,98.8 A108,108 0 0 1 195.3,216.0 L161.4,171.4 A52,52 0 0 0 179.8,115.0 Z" class="sec sec2" data-i="1"/><text x="206.1" y="151.7" class="sec-num" text-anchor="middle">2·2F</text><text x="206.1" y="166.7" class="sec-code" text-anchor="middle">MOI</text><text x="250.8" y="94.8" class="dial-tick" text-anchor="start">12초</text><path d="M191.6,218.7 A108,108 0 0 1 68.4,218.7 L100.3,172.7 A52,52 0 0 0 159.7,172.7 Z" class="sec sec3" data-i="2"/><text x="130.0" y="207.0" class="sec-num" text-anchor="middle">3·3F</text><text x="130.0" y="222.0" class="sec-code" text-anchor="middle">MOS</text><text x="204.6" y="236.7" class="dial-tick" text-anchor="start">24초</text><path d="M64.7,216.0 A108,108 0 0 1 26.6,98.8 L80.2,115.0 A52,52 0 0 0 98.6,171.4 Z" class="sec sec4" data-i="3"/><text x="53.9" y="151.7" class="sec-num" text-anchor="middle">4·4F</text><text x="53.9" y="166.7" class="sec-code" text-anchor="middle">MOH</text><text x="55.4" y="236.7" class="dial-tick" text-anchor="end">36초</text><path d="M28.0,94.5 A108,108 0 0 1 127.7,22.0 L128.9,78.0 A52,52 0 0 0 80.9,112.9 Z" class="sec sec5" data-i="4"/><text x="83.0" y="62.3" class="sec-num" text-anchor="middle">5·5F</text><text x="83.0" y="77.3" class="sec-code" text-anchor="middle">MO5</text><text x="9.2" y="94.8" class="dial-tick" text-anchor="end">48초</text><circle cx="130" cy="130" r="46" class="dial-hub"/><text x="130" y="128" class="hub1" text-anchor="middle">1분</text><text x="130" y="145" class="hub2" text-anchor="middle">주기</text><line x1="130" y1="82" x2="130" y2="8" class="hand" id="hand-sprint"/><text x="130" y="266" class="dial-cap" text-anchor="middle">바깥 링: 결승 비컨 MO (상시 발신)</text></svg>
       <div class="readout">
-        <button type="button" class="btn" data-dial="sprint"><span class="tri"></span>주기 돌려보기</button>
         <output id="out-sprint" aria-live="polite">대기 중</output>
+        <span class="laps"><b id="laps-sprint">0</b>바퀴</span>
       </div>
     </div>
   </div>
-  <p class="note">다이얼은 실제보다 빠르게 돕니다. 클래식은 1분을 2초로, 스프린트는 12초를 2초로 줄였습니다. 폭스오링은 모든 송신기가 쉬지 않고 발신하므로 다이얼이 필요 없습니다.</p>
+  <div class="dial-ctl">
+    <button type="button" class="btn" data-dial="both"><span class="tri"></span>두 다이얼 같이 돌려보기</button>
+    <span class="dial-hint">같은 시간 동안 클래식이 1바퀴 돌면 스프린트는 5바퀴</span>
+  </div>
+  <p class="note">두 다이얼은 같은 배속으로 돕니다. 실제 1분을 8초로 줄여, 클래식은 한 칸 8초, 스프린트는 한 칸 1.6초입니다. 폭스오링은 모든 송신기가 쉬지 않고 발신하므로 다이얼이 필요 없습니다.</p>
 
   <!-- 2-1 클래식 -->
   <div class="sec" id="s2-1">
@@ -2564,7 +2572,7 @@ window.NARR = [
 
 ["ch2",".ch-head",0,"2장. 경기 종목. 클래식, 스프린트, 폭스오링 세 종목이 무엇이 같고 무엇이 다른지 살펴봅니다."],
 ["ch2",":scope > .prose p",0,"세 종목 모두 송신기를 찾는 순서는 선수가 정하고, 결승 비컨은 마지막에 들릅니다. 차이는 송신기가 언제 발신하는지, 신호가 얼마나 멀리 들리는지, 지도에 무엇이 표시되는지에 있습니다."],
-["ch2",".dials",0,"두 다이얼을 돌려 보겠습니다. 왼쪽 클래식은 5분 주기를 다섯 칸으로 나눠 한 칸이 1분입니다. 오른쪽 스프린트는 1분 주기를 다섯 칸으로 나눠 한 칸이 12초입니다. 주황색 칸이 지금 발신 중인 송신기이고, 바깥 링은 늘 발신하는 결승 비컨입니다. 폭스오링은 모든 송신기가 쉬지 않고 발신하므로 다이얼이 없습니다.","dials:on"],
+["ch2", ".dials", 0, "두 다이얼을 같은 빠르기로 함께 돌려 보겠습니다. 왼쪽 클래식은 5분 주기를 다섯 칸으로 나눠 한 칸이 1분입니다. 오른쪽 스프린트는 1분 주기를 다섯 칸으로 나눠 한 칸이 12초입니다. 같은 시간 동안 클래식이 한 바퀴 도는 사이, 스프린트는 다섯 바퀴를 돕니다. 아래 바퀴 수를 비교해 보십시오. 주황색 칸이 지금 발신 중인 송신기이고, 바깥 링은 늘 발신하는 결승 비컨입니다. 폭스오링은 모든 송신기가 쉬지 않고 발신하므로 다이얼이 없습니다.", "dials:on"],
 
 ["s2-1","h3",0,"2의 1. 클래식.","dials:off"],
 ["s2-1",".prose p",0,"에이 알 디 에프의 기본 종목입니다. 송신기 다섯 대가 같은 주파수에서 1분씩 차례로 발신합니다. 한 송신기의 방향을 잴 수 있는 시간은 5분 중 1분뿐입니다. 이 1분 안에 방향을 재고 지도에 선을 긋는 것이 클래식의 핵심 기술입니다."],
@@ -2839,8 +2847,8 @@ window.NARR = [
   // ---------- 주기 다이얼 ----------
   const CODES = ["MOE", "MOI", "MOS", "MOH", "MO5"];
   const cfg = {
-    classic: { period: 300, speed: 30, label: (i, s) => `${i + 1}번 ${CODES[i]} · ${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}` },
-    sprint:  { period: 60,  speed: 6,  label: (i, s) => `${i + 1}·${i + 1}F번 ${CODES[i]} · ${String(Math.floor(s)).padStart(2, "0")}초` }
+    classic: { period: 300, speed: 7.5, label: (i, s) => `${i + 1}번 ${CODES[i]} · ${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, "0")}` },
+    sprint:  { period: 60,  speed: 7.5,  label: (i, s) => `${i + 1}·${i + 1}F번 ${CODES[i]} · ${String(Math.floor(s)).padStart(2, "0")}초` }
   };
   const state = {};
 
@@ -2852,6 +2860,7 @@ window.NARR = [
     svg.querySelectorAll(".sec").forEach((p, i) => p.classList.toggle("on", i === idx));
     document.getElementById("hand-" + kind).setAttribute("transform", `rotate(${frac * 360} 130 130)`);
     document.getElementById("out-" + kind).textContent = "발신 중: " + c.label(idx, sec % c.period);
+    document.getElementById("laps-" + kind).textContent = Math.floor(sec / c.period);
   }
 
   function dialTick(kind) {
@@ -2864,16 +2873,22 @@ window.NARR = [
     st.raf = requestAnimationFrame(() => dialTick(kind));
   }
 
+  // 두 다이얼을 같은 시계로 함께 돌림 (멈추면 그 자리에 정지, 다시 누르면 처음부터)
   document.querySelectorAll("[data-dial]").forEach(btn => {
-    const kind = btn.dataset.dial;
+    let raf = 0, run = false, t0 = 0;
+    const kinds = ["classic", "sprint"];
+    function loop(now) {
+      const real = (now - t0) / 1000;
+      kinds.forEach(k => draw(k, real * cfg[k].speed));
+      raf = requestAnimationFrame(loop);
+    }
     btn.addEventListener("click", () => {
-      const st = state[kind] || (state[kind] = { sec: 0, run: false });
-      st.run = !st.run;
-      btn.classList.toggle("is-on", st.run);
-      btn.lastChild.textContent = st.run ? "멈추기" : "주기 돌려보기";
-      document.getElementById("dial-" + kind).classList.toggle("run", st.run);
-      if (st.run) { st.last = performance.now(); dialTick(kind); }
-      else cancelAnimationFrame(st.raf);
+      run = !run;
+      btn.classList.toggle("is-on", run);
+      btn.lastChild.textContent = run ? "멈추기" : "두 다이얼 같이 돌려보기";
+      kinds.forEach(k => document.getElementById("dial-" + k).classList.toggle("run", run));
+      if (run) { t0 = performance.now(); raf = requestAnimationFrame(loop); }
+      else cancelAnimationFrame(raf);
     });
   });
 
