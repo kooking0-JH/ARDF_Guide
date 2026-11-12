@@ -860,8 +860,8 @@ table.cmp td .mono { font-size: 0.92em; }
     <div class="bands">
       <article class="band b35">
         <div class="band-head"><strong>3.5 MHz</strong><span>80 m · HF</span></div>
-        <img src="images/map-receiver-35.jpg" alt="대회 지도 위에 놓인 3.5 MHz 루프 안테나 수신기와 헤드폰" width="1100" height="825">
-        <p class="cap">대회 지도와 3.5 MHz 루프 수신기 (80 m receiver)</p>
+        <img src="images/ota-2023-80m-runner.jpg" alt="숲속에서 루프 안테나가 달린 3.5 MHz 수신기를 들고 헤드폰을 쓴 채 지도를 보며 걷는 선수" width="1143" height="825">
+        <p class="cap">3.5 MHz 루프 수신기로 숲을 탐색하는 선수 (80 m receiver). 사진: <i>ARRL On the Air</i> 2023년 3·4월호, Charles E. Scharlau(NZ0I) 기사</p>
         <dl>
           <dt>주파수</dt><dd class="mono">3.510 – 3.600 MHz</dd>
           <dt>송신 출력</dt><dd>1 – 5 W</dd>
@@ -872,8 +872,8 @@ table.cmp td .mono { font-size: 0.92em; }
       </article>
       <article class="band b144">
         <div class="band-head"><strong>144 MHz</strong><span>2 m · VHF</span></div>
-        <img src="images/rx-pj2d-145.jpg" alt="2 m 대역 방향 탐지 수신기 PJ-2D와 분리형 안테나 소자, 이어폰, 가방" width="675" height="1057">
-        <p class="cap">2 m 대역 수신기 세트, 분리형 소자 6개 (PJ-2D)</p>
+        <img src="images/kr-2m-yagi-runners.jpg" alt="제14회 전파방향탐지대회(ARDF) 숲길에서 야기 안테나 수신기를 머리 위로 들고 방향을 재는 선수들" width="600" height="398">
+        <p class="cap">제14회 전파방향탐지대회(ARDF)에서 야기 안테나 수신기로 방향을 재는 선수들 (2 m receiver). 사진: 대회 위원회 제공</p>
         <dl>
           <dt>주파수</dt><dd class="mono">144.500 – 144.900 MHz</dd>
           <dt>송신 출력</dt><dd>ERP 0.25 – 1 W</dd>
@@ -2531,7 +2531,7 @@ table.cmp td .mono { font-size: 0.92em; }
     <li>OK2BWN, SUPERFOX 3,5GX · 3,5MX · 145MX 설명서와 제품 사양표</li>
     <li>Marcela Šrůtová (OK1KYP), 무선 방향탐지 수신기 기사, <i>Praktická elektronika A Radio</i>, 2016년 9월호 (사진: Miloslav Nečas)</li>
     <li>「ARDF 지도제작교육」 교재 (지도 기호와 색)</li>
-    <li>사진: 6K5EHN</li>
+    <li>사진: 6K5EHN. 1-2절 3.5 MHz 사진은 <i>ARRL On the Air</i> 2023년 3·4월호</li>
   </ul>
 </footer>
 </main>
@@ -2555,7 +2555,7 @@ window.NARR = [
 
 ["s1-2","h3",0,"1의 2. 두 개의 대역."],
 ["s1-2",".prose p",0,"에이 알 디 에프는 두 대역에서 열립니다. 단파인 3.5 메가헤르츠, 흔히 80미터 대역이라 부르는 곳과, 초단파인 144 메가헤르츠, 2미터 대역입니다. 국제 대회의 클래식 경기는 두 대역을 하루씩 번갈아 치릅니다. 대역마다 전파가 산과 숲을 지나는 방식이 달라서 수신기도, 탐색 요령도 다릅니다."],
-["s1-2",".bands",0,"왼쪽 파란 카드가 3.5 메가헤르츠입니다. 사진은 대회 지도 위에 놓인 루프 안테나 수신기입니다. 송신 출력은 1에서 5와트, 송신 안테나는 수직으로 세웁니다. 오른쪽 초록 카드가 144 메가헤르츠입니다. 사진의 수신기는 분리형 소자를 끼워 쓰는 빔 안테나 방식입니다. 송신 안테나는 수평으로 눕혀 지상 2에서 3미터 높이에 둡니다."],
+["s1-2",".bands",0,"왼쪽 파란 카드가 3.5 메가헤르츠입니다. 사진은 루프 안테나 수신기를 들고 숲을 탐색하는 선수입니다. 송신 출력은 1에서 5와트, 송신 안테나는 수직으로 세웁니다. 오른쪽 초록 카드가 144 메가헤르츠입니다. 사진은 제14회 전파방향탐지대회에서 야기 안테나 수신기를 머리 위로 들고 방향을 재는 선수들입니다. 송신 안테나는 수평으로 눕혀 지상 2에서 3미터 높이에 둡니다."],
 ["s1-2",".note",0,"카드의 주파수 범위는 아이 에이 알 유 제1지역 규정 기준입니다. 실제 대회 주파수는 대회 안내문에서 확인합니다."],
 
 ["s1-3","h3",0,"1의 3. 송신기 이름은 모스 부호로."],
@@ -3465,7 +3465,7 @@ window.NARR = [
   const mins = Math.max(1, Math.round(items.filter(q => !q.ch.startsWith("app")).reduce((n, q) => n + q.text.replace(/\s/g, "").length, 0) / 6.5 / 60));
   const wrap = document.createElement("div");
   wrap.className = "listen-all";
-  wrap.appendChild(makeBtn(`처음부터 듣기 · 약 ${mins}분`, it => !it.ch.startsWith("app"), true));
+  wrap.appendChild(makeBtn("처음부터 듣기", it => !it.ch.startsWith("app"), true));
   const hint = document.createElement("span");
   hint.className = "voice-note";
   hint.textContent = !noSpeech ? "기기 음성으로 그림과 표까지 해설하고, 읽는 곳으로 화면이 따라갑니다."
