@@ -372,6 +372,12 @@ figcaption { font-size: 0.82rem; color: var(--ink-3); margin-top: 8px; line-heig
 .btn-voice .spk { width: 14px; height: 14px; flex: none; }
 .btn-voice.is-on { background: var(--flag); color: #fff; border-color: var(--flag); box-shadow: 0 2px 0 #a8440f; }
 .ch-title .btn-voice { margin-top: 10px; }
+.narr-unsup { flex-basis: 100%; display: grid; gap: 10px; margin-top: 4px; padding: 12px 14px; font-size: 0.9rem; line-height: 1.6; color: var(--ink-2); background: var(--flag-soft); border: 1px solid var(--flag); border-radius: 8px; }
+.narr-unsup p { margin: 0; }
+.unsup-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.unsup-actions .btn { text-decoration: none; }
+.unsup-actions .btn.alt { background: var(--paper); color: var(--ink); border: 1.5px solid var(--ink); box-shadow: 0 2px 0 var(--ink); }
+.voicebar .narr-unsup { color: var(--ink); }
 .listen-all { margin-top: 20px; display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
 .btn-voice.big { font-size: 0.95rem; padding: 11px 16px; }
 .btn-voice.big .spk { width: 18px; height: 18px; }
@@ -3372,7 +3378,8 @@ window.NARR = [
     bar.classList.toggle("emb", !!window.__embedOn);
     if (window.__embedOn) { try { parent.postMessage({ type: "antenna-types:needview" }, "*"); } catch (e) {} placeBar(); }
     if (!voice && S.getVoices().length) {
-      $("vb-msg").textContent = "이 브라우저에는 한국어 음성이 없어 읽을 수 없습니다. 엣지, 크롬, 사파리에서 열어 보십시오.";
+      $("vb-msg").textContent = "";
+      $("vb-msg").appendChild(unsupPanel("이 화면에는 한국어 음성이 없어 읽을 수 없습니다. 엣지, 크롬, 사파리 같은 브라우저에서 열어 보십시오."));
       $("vb-msg").hidden = false; playing = false; i = 0; updateBar(); return;
     }
     $("vb-msg").hidden = true;
@@ -3393,13 +3400,50 @@ window.NARR = [
   $("vb-close").addEventListener("click", close);
   rateSel.addEventListener("change", () => { if (playing) go(); });
 
+  // 앱 안 브라우저(안드로이드 WebView 등)는 음성 합성이 없음: 버튼은 두고, 누르면 브라우저로 여는 방법을 안내
+  const UA = navigator.userAgent || "";
+  const isAndroid = /Android/i.test(UA);
+  const noSpeech = !S || !window.SpeechSynthesisUtterance || (isAndroid && /; wv\)/.test(UA));
+  const pageUrl = location.href.split("#")[0];
+  function unsupPanel(text) {
+    const box = document.createElement("div");
+    box.className = "narr-unsup";
+    box.innerHTML = "<p></p>" +
+      '<div class="unsup-actions"><a class="btn" target="_blank" rel="noopener">브라우저에서 열기</a><button type="button" class="btn alt">주소 복사</button></div>';
+    box.querySelector("p").textContent = text;
+    box.querySelector("a").href = isAndroid
+      ? "intent://" + pageUrl.replace(/^https?:\/\//, "") + "#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=" + encodeURIComponent(pageUrl) + ";end"
+      : pageUrl;
+    const cp = box.querySelector("button");
+    cp.addEventListener("click", () => {
+      const done = () => { cp.textContent = "복사했습니다"; };
+      const legacy = () => {
+        const t = document.createElement("textarea"); t.value = pageUrl; t.setAttribute("readonly", "");
+        t.style.position = "absolute"; t.style.left = "-9999px"; document.body.appendChild(t); t.select();
+        try { document.execCommand("copy") ? done() : (cp.textContent = pageUrl); } catch (e) { cp.textContent = pageUrl; }
+        document.body.removeChild(t);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(pageUrl).then(done, legacy);
+      else legacy();
+    });
+    return box;
+  }
+  const APPMSG = "이 앱 화면에서는 음성 해설을 들을 수 없습니다. 크롬이나 사파리 같은 브라우저에서 열면 들을 수 있습니다.";
+  let unsupBox = null, unsupHost = null;
+  function showUnsup(btn) {
+    if (!unsupBox) unsupBox = unsupPanel(APPMSG);
+    const host = btn.closest(".listen-all") || btn.closest(".ch-title") || btn.closest("h3");
+    if (!host) return;
+    if (unsupHost === host && !unsupBox.hidden) { unsupBox.hidden = true; return; }
+    if (host.classList.contains("listen-all")) host.appendChild(unsupBox); else host.after(unsupBox);
+    unsupHost = host; unsupBox.hidden = false;
+  }
   function makeBtn(label, f, big) {
     const b = document.createElement("button");
     b.type = "button"; b.className = "btn btn-voice" + (big ? " big" : "");
     b.dataset.label = label;
     b.innerHTML = SPK + '<span class="lbl">' + label + '</span>';
-    if (!S || !window.SpeechSynthesisUtterance) { b.disabled = true; b.title = "이 화면에서는 음성 해설을 쓸 수 없습니다"; }
-    b.addEventListener("click", () => start(b, f));
+    b.addEventListener("click", () => noSpeech ? showUnsup(b) : start(b, f));
     return b;
   }
   const mins = Math.max(1, Math.round(items.filter(q => !q.ch.startsWith("app")).reduce((n, q) => n + q.text.replace(/\s/g, "").length, 0) / 6.5 / 60));
@@ -3408,8 +3452,8 @@ window.NARR = [
   wrap.appendChild(makeBtn(`처음부터 듣기 · 약 ${mins}분`, it => !it.ch.startsWith("app"), true));
   const hint = document.createElement("span");
   hint.className = "voice-note";
-  hint.textContent = S ? "기기 음성으로 그림과 표까지 해설하고, 읽는 곳으로 화면이 따라갑니다."
-                       : "이 화면에서는 음성 해설을 쓸 수 없습니다. 크롬이나 사파리 같은 브라우저에서 열어 주십시오.";
+  hint.textContent = !noSpeech ? "기기 음성으로 그림과 표까지 해설하고, 읽는 곳으로 화면이 따라갑니다."
+                       : "앱 화면에서는 음성 해설이 나오지 않습니다. 버튼을 누르면 브라우저로 여는 방법이 나옵니다.";
   wrap.appendChild(hint);
   document.querySelector(".hero-lead").after(wrap);
   document.querySelectorAll(".chapter").forEach(ch => {
