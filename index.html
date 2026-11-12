@@ -2699,6 +2699,7 @@ window.NARR = [
 ["s5-4",".symgroup",0,"갈색 지형 기호입니다. 등고선이 낮은 쪽으로 불룩하면 능선, 높은 쪽으로 파고들면 골짜기입니다. 작은 봉우리와 구덩이는 송신기 근처에서 위치를 확인하는 기준이 되고, 침식 도랑은 덤불에 가려 다치기 쉬우니 조심합니다."],
 ["s5-4",".symgroup",1,"검정 바위 기호입니다. 눈금 달린 굵은 선은 지날 수 없는 절벽으로, 144 메가헤르츠 반사파가 생기는 곳이기도 합니다. 삼각형이 모인 바위 지대는 되도록 돌아갑니다."],
 ["s5-4",".symgroup",2,"파랑 물 기호입니다. 검은 테두리가 있는 물과 늪은 건널 수 없으니 둘레로 돌아가고, 개울은 다리를 찾아 건넙니다."],
+["s5-4",".symgroup",3,"노랑과 초록은 땅과 식생입니다. 노란 트인 땅은 가장 빨리 달리고 방위 재기도 좋은 곳입니다. 흰색은 달리기 쉬운 숲이고, 초록이 진할수록 느려져 진한 초록은 거의 지날 수 없습니다."],
 ["s5-4",".symgroup",4,"검정 인공물 기호입니다. 길은 숲을 가로지르기보다 빠른 경우가 많습니다. 송전선은 3.5 메가헤르츠 신호를 다시 방사하니 떨어져서 재고, 눈금이 양쪽에 있는 울타리는 넘으면 안 됩니다."],
 ["s5-4",".symgroup",5,"보라 경기 기호입니다. 삼각형이 출발, 원이 비컨이나 컨트롤, 점선은 반드시 따라가야 하는 길, 이중 원이 결승입니다. 넘을 수 없는 울타리 위의 보라색 괄호 모양은 통과 지점으로, 이곳으로만 지납니다. 보라 세로 줄무늬는 출입 금지 구역으로, 들어가면 실격입니다."],
 ["s5-5","h3",0,"5의 5. 자북선과 지도 정치."],
@@ -2853,14 +2854,14 @@ window.NARR = [
     document.getElementById("out-" + kind).textContent = "발신 중: " + c.label(idx, sec % c.period);
   }
 
-  function tick(kind) {
+  function dialTick(kind) {
     const st = state[kind];
     if (!st || !st.run) return;
     const now = performance.now();
     st.sec += (now - st.last) / 1000 * cfg[kind].speed;
     st.last = now;
     draw(kind, st.sec);
-    st.raf = requestAnimationFrame(() => tick(kind));
+    st.raf = requestAnimationFrame(() => dialTick(kind));
   }
 
   document.querySelectorAll("[data-dial]").forEach(btn => {
@@ -2871,7 +2872,7 @@ window.NARR = [
       btn.classList.toggle("is-on", st.run);
       btn.lastChild.textContent = st.run ? "멈추기" : "주기 돌려보기";
       document.getElementById("dial-" + kind).classList.toggle("run", st.run);
-      if (st.run) { st.last = performance.now(); tick(kind); }
+      if (st.run) { st.last = performance.now(); dialTick(kind); }
       else cancelAnimationFrame(st.raf);
     });
   });
@@ -3162,7 +3163,7 @@ window.NARR = [
       const spin = now => { paintLevel(now); if (raf) raf = requestAnimationFrame(spin); };
       raf = requestAnimationFrame(spin);
     }
-    function play(sound, b) {
+    function f5Play(sound, b) {
       if (raf) { stop(); return; }
       if (sound) { AUDIO.sims(); stopAll(); AUDIO.narr(); }
       withSound = sound; lastMin = -1;
@@ -3181,8 +3182,8 @@ window.NARR = [
       };
       raf = requestAnimationFrame(step);
     }
-    btn.addEventListener("click", () => play(true, btn));
-    btnQ.addEventListener("click", () => play(false, btnQ));
+    btn.addEventListener("click", () => f5Play(true, btn));
+    btnQ.addEventListener("click", () => f5Play(false, btnQ));
     AUDIO.f5 = () => { if (raf && withSound) stop(); };
     if ("IntersectionObserver" in window) new IntersectionObserver(es => es.forEach(en => { if (!en.isIntersecting && raf) stop(); }), { threshold: 0.15 }).observe(svg5);
     show(300);  // 처음 화면: 다섯 방위선이 모두 보이는 완성 상태
@@ -3214,7 +3215,7 @@ window.NARR = [
     }
     const area = poly => Math.abs(poly.reduce((s, p, i) => { const q = poly[(i + 1) % poly.length]; return s + p[0] * q[1] - q[0] * p[1]; }, 0)) / 2;
     const pts = a => a.map(p => p.map(v => v.toFixed(1)).join(",")).join(" ");
-    function draw() {
+    function xbDraw() {
       const P2 = pathPt(+rng.value), w1 = wedge(P1), w2 = wedge(P2), ov = clip(w1, w2);
       dyn.innerHTML = `<polygon points="${pts(w1)}" class="xb-w1"/><polygon points="${pts(w2)}" class="xb-w2"/>` +
         (ov.length > 2 ? `<polygon points="${pts(ov)}" class="xb-ov"/>` : "") +
@@ -3226,9 +3227,9 @@ window.NARR = [
       const A = ov.length > 2 ? area(ov) : 0;
       out.textContent = `두 방위선이 만나는 각도 ${ang}° · 주황색이 송신기가 있을 만한 범위 (오차 ±6°) · ${ang < 20 ? "길쭉해서 위치가 흐립니다. 더 옮겨서 재십시오." : ang < 50 ? "범위가 줄어들고 있습니다." : "범위가 작고 또렷합니다."}`;
     }
-    rng.addEventListener("input", draw);
-    draw();
-    window.__xbear = v => { rng.value = v; draw(); };
+    rng.addEventListener("input", xbDraw);
+    xbDraw();
+    window.__xbear = v => { rng.value = v; xbDraw(); };
   }
 
 
@@ -3462,7 +3463,7 @@ window.NARR = [
       sec.querySelector(":scope > h3").appendChild(makeBtn("듣기", it => it.sec === sec.id, false));
     });
   });
-  window.addEventListener("pagehide", () => synth && synth.cancel());
+  window.addEventListener("pagehide", () => { try { S && S.cancel(); } catch (e) {} });
 })();
 </script>
 <script>
