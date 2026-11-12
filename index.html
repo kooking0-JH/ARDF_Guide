@@ -1,6 +1,10 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>*,*::before,*::after{box-sizing:border-box}html{-webkit-text-size-adjust:100%}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>ARDF 입문 가이드</title>
-<meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap">
@@ -385,6 +389,8 @@ figcaption { font-size: 0.82rem; color: var(--ink-3); margin-top: 8px; line-heig
   display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
   box-shadow: 0 -4px 16px rgba(0,0,0,.18);
 }
+.voicebar.emb { position: absolute; bottom: auto; top: 0; }
+html.embedded .page { padding-block: 8px 40px; }
 .voicebar .vb-label { flex: 1 1 200px; min-width: 0; font-size: 0.88rem; }
 .voicebar .vb-label small { display: block; color: #b9c4be; font-size: 0.75rem; }
 .voicebar .btn { background: #ffffff; color: var(--ink); box-shadow: 0 2px 0 #7d8a83; }
@@ -756,6 +762,8 @@ table.cmp td .mono { font-size: 0.92em; }
   * { transition: none !important; }
 }
 </style>
+</head>
+<body>
 
 <main class="page">
 
@@ -3290,6 +3298,13 @@ window.NARR = [
     '<button type="button" class="btn" id="vb-close" aria-label="음성 해설 닫기">✕</button>' +
     '<div class="vb-msg" id="vb-msg" hidden></div>';
   document.body.appendChild(bar);
+  function placeBar() {
+    if (!window.__embedOn || bar.hidden) return;
+    const v = window.__embedView; if (!v) return;
+    const bh = bar.offsetHeight || 64, dh = document.documentElement.scrollHeight;
+    bar.style.top = Math.max(0, Math.min(dh - bh, v.top + v.height - bh)) + "px";
+  }
+  document.addEventListener("embedview", placeBar);
   const $ = id => document.getElementById(id);
   const playBtn = $("vb-play"), rateSel = $("vb-rate");
 
@@ -3299,8 +3314,17 @@ window.NARR = [
     active = el;
     if (el) {
       el.classList.add("reading");
-      const r = el.getBoundingClientRect(), off = Math.max(56, innerHeight * 0.1);
-      scrollTo({ top: Math.max(0, r.top + scrollY - off), behavior: reduce ? "auto" : "smooth" });
+      const r = el.getBoundingClientRect();
+      if (window.__embedOn) {
+        // 블로그 안에 들어가 있으면 바깥 페이지에 스크롤을 부탁
+        const v = window.__embedView, H = v && v.height ? v.height : innerHeight;
+        const off = Math.max(56, H * 0.1);
+        const y = r.top + scrollY - off + H / 2;
+        try { parent.postMessage({ type: "antenna-types:scrollto", y: y, smooth: !reduce }, "*"); } catch (e) {}
+      } else {
+        const off = Math.max(56, innerHeight * 0.1);
+        scrollTo({ top: Math.max(0, r.top + scrollY - off), behavior: reduce ? "auto" : "smooth" });
+      }
     }
   }
   function updateBar() {
@@ -3345,6 +3369,8 @@ window.NARR = [
     pickVoice();
     list = items.filter(f); if (!list.length) return;
     bar.hidden = false; document.body.classList.add("narr-open");
+    bar.classList.toggle("emb", !!window.__embedOn);
+    if (window.__embedOn) { try { parent.postMessage({ type: "antenna-types:needview" }, "*"); } catch (e) {} placeBar(); }
     if (!voice && S.getVoices().length) {
       $("vb-msg").textContent = "이 브라우저에는 한국어 음성이 없어 읽을 수 없습니다. 엣지, 크롬, 사파리에서 열어 보십시오.";
       $("vb-msg").hidden = false; playing = false; i = 0; updateBar(); return;
@@ -3395,5 +3421,33 @@ window.NARR = [
   window.addEventListener("pagehide", () => synth && synth.cancel());
 })();
 </script>
+<script>
+/* 블로그(티스토리) iframe 삽입용: 바깥 페이지가 ping을 보내면 높이를 알려 주고, 보이는 범위를 받아 음성 막대 위치를 맞춤 */
+(function(){
+  if (window.self === window.top) return;
+  var last = 0, on = false;
+  function send(force){
+    if (!on) return;
+    var h = Math.ceil(document.documentElement.scrollHeight);
+    if (!force && Math.abs(h - last) < 2) return;
+    last = h;
+    try { window.parent.postMessage({type: 'antenna-types:height', height: h}, '*'); } catch(e){}
+  }
+  window.addEventListener('message', function(e){
+    var d = e.data;
+    if (!d || typeof d !== 'object') return;
+    if (d.type === 'antenna-types:ping'){
+      if (!on){ on = true; window.__embedOn = true; document.documentElement.classList.add('embedded'); }
+      send(true);
+    } else if (d.type === 'antenna-types:viewport'){
+      window.__embedView = {top: +d.top || 0, height: +d.height || 0};
+      document.dispatchEvent(new Event('embedview'));
+    }
+  });
+  if ('ResizeObserver' in window) new ResizeObserver(function(){ send(false); }).observe(document.body);
+  window.addEventListener('load', function(){ send(true); });
+})();
+</script>
 
-</body></html>
+</body>
+</html>
